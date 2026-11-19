@@ -28,3 +28,11 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+
+- All site copy (ES and EN) and project data live in `src/content/site.ts`; components read from `CONTENT[lang]` so both languages stay in sync.
+- Spanish pages live at `/` and `/proyectos/$slug`, English at `/en` and `/en/projects/$slug`; each route wraps a shared page component from `src/components/site/` with a `lang` prop, so layouts are never duplicated per language.
+- Page head tags are built with `buildHead()` in `src/lib/seo.ts` (canonical + hreflang on the public domain), so every route emits consistent SEO metadata.
+- `/sitemap.xml` is router-derived (`src/lib/sitemap.ts`); every route declares `staticData.sitemap`, and project URLs come from `PROJECT_SLUGS`.
+- Binary media (photo, CV PDF) are CDN assets referenced through `.asset.json` pointers in `src/assets/`, keeping the repo light.

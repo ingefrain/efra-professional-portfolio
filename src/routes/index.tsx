@@ -1,23 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HomePage } from "@/components/site/HomePage";
+import { CONTACT, CONTENT, PERSON_NAME, SITE_URL } from "@/content/site";
+import { buildHead } from "@/lib/seo";
 
-// The home route ships no og:image, so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  staticData: { sitemap: true },
+  head: () =>
+    buildHead({
+      lang: "es",
+      title: CONTENT.es.meta.title,
+      description: CONTENT.es.meta.description,
+      path: "/",
+      altPath: "/en",
+      type: "profile",
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: PERSON_NAME,
+        alternateName: "Efra",
+        jobTitle: "Senior Software Engineer",
+        url: SITE_URL,
+        email: `mailto:${CONTACT.email}`,
+        sameAs: [CONTACT.linkedin, CONTACT.github],
+        knowsLanguage: ["es", "en", "ru"],
+      },
+    }),
+  component: () => <HomePage lang="es" />,
 });
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}

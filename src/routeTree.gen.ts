@@ -10,33 +10,80 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as EnIndexRouteImport } from './routes/en.index'
+import { Route as ProyectosSlugRouteImport } from './routes/proyectos.$slug'
+import { Route as EnProjectsSlugRouteImport } from './routes/en.projects.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnIndexRoute = EnIndexRouteImport.update({
+  id: '/en/',
+  path: '/en/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProyectosSlugRoute = ProyectosSlugRouteImport.update({
+  id: '/proyectos/$slug',
+  path: '/proyectos/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnProjectsSlugRoute = EnProjectsSlugRouteImport.update({
+  id: '/en/projects/$slug',
+  path: '/en/projects/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/proyectos/$slug': typeof ProyectosSlugRoute
+  '/en/': typeof EnIndexRoute
+  '/en/projects/$slug': typeof EnProjectsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/proyectos/$slug': typeof ProyectosSlugRoute
+  '/en': typeof EnIndexRoute
+  '/en/projects/$slug': typeof EnProjectsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/proyectos/$slug': typeof ProyectosSlugRoute
+  '/en/': typeof EnIndexRoute
+  '/en/projects/$slug': typeof EnProjectsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/sitemap.xml' | '/proyectos/$slug' | '/en/' | '/en/projects/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/sitemap.xml' | '/proyectos/$slug' | '/en' | '/en/projects/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/sitemap.xml'
+    | '/proyectos/$slug'
+    | '/en/'
+    | '/en/projects/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ProyectosSlugRoute: typeof ProyectosSlugRoute
+  EnIndexRoute: typeof EnIndexRoute
+  EnProjectsSlugRoute: typeof EnProjectsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +95,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/': {
+      id: '/en/'
+      path: '/en'
+      fullPath: '/en/'
+      preLoaderRoute: typeof EnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/proyectos/$slug': {
+      id: '/proyectos/$slug'
+      path: '/proyectos/$slug'
+      fullPath: '/proyectos/$slug'
+      preLoaderRoute: typeof ProyectosSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/projects/$slug': {
+      id: '/en/projects/$slug'
+      path: '/en/projects/$slug'
+      fullPath: '/en/projects/$slug'
+      preLoaderRoute: typeof EnProjectsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ProyectosSlugRoute: ProyectosSlugRoute,
+  EnIndexRoute: EnIndexRoute,
+  EnProjectsSlugRoute: EnProjectsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
