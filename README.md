@@ -1,6 +1,6 @@
-# EFRAN Professional Portfolio
+# EFRA Professional Portfolio
 
-# EFRAN | Diseño y desarrollo de portafolio profesional
+# EFRA | Diseño y desarrollo de portafolio profesional
 
 Diseña y desarrolla un sitio web profesional para Efraín González Macías, ingeniero de software y desarrollador Full Stack con casi 20 años de experiencia.
 
@@ -51,9 +51,9 @@ Evita diagramas geométricos decorativos, esquemas técnicos abstractos, ilustra
 
 La marca será:
 
-EFRAN
+EFRA
 
-Crea un logotipo tipográfico utilizando exclusivamente el nombre EFRAN.
+Crea un logotipo tipográfico utilizando exclusivamente el nombre EFRA.
 
 No inventes símbolos, isotipos ni emblemas.
 
@@ -151,7 +151,7 @@ La fotografía debe integrarse de manera natural, sin marcos exagerados, sombras
 Construye una portada completa con las siguientes secciones.
 
 ### A. Encabezado
-Logotipo tipográfico EFRAN.
+Logotipo tipográfico EFRA.
 Menú:
 - Inicio.
 - Proyectos.

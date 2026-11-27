@@ -36,3 +36,4 @@ use the editor.
 - Page head tags are built with `buildHead()` in `src/lib/seo.ts` (canonical + hreflang on the public domain), so every route emits consistent SEO metadata.
 - `/sitemap.xml` is router-derived (`src/lib/sitemap.ts`); every route declares `staticData.sitemap`, and project URLs come from `PROJECT_SLUGS`.
 - Binary media (photo, CV PDF) are CDN assets referenced through `.asset.json` pointers in `src/assets/`, keeping the repo light.
+- Project case studies use optional structured sections, links and screenshot entries in the bilingual content module; shared presentation renders only supplied data so missing images never create placeholders.

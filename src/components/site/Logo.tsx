@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
+import { BRAND_NAME } from "@/content/site";
 
-/** Typographic EFRAN logo: Manrope 700 with slightly opened letter spacing. */
+/** Typographic brand logo: Manrope 700 with slightly opened letter spacing. */
 export function Logo({ className, inverse = false }: { className?: string; inverse?: boolean }) {
   return (
     <span
@@ -11,7 +12,7 @@ export function Logo({ className, inverse = false }: { className?: string; inver
       )}
       style={{ marginRight: "-0.2em" }}
     >
-      EFRAN
+      {BRAND_NAME}
     </span>
   );
 }

@@ -13,23 +13,24 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { langFromPath } from "../content/site";
+import { BRAND_NAME, CONTENT, PERSON_NAME, langFromPath } from "../content/site";
+import { Button } from "@/components/ui/button";
 
 function NotFoundComponent() {
+  const lang = useRouterState({ select: (s) => langFromPath(s.location.pathname) });
+  const t = CONTENT[lang].errors;
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">{t.notFound}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{t.notFoundText}</p>
         <div className="mt-6">
           <Link
-            to="/"
+            to={lang === "es" ? "/" : "/en"}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            {t.home}
           </Link>
         </div>
       </div>
@@ -40,6 +41,8 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
+  const lang = useRouterState({ select: (s) => langFromPath(s.location.pathname) });
+  const t = CONTENT[lang].errors;
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
@@ -47,27 +50,23 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
-        </p>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">{t.failed}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{t.failedText}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
+          <Button
             onClick={() => {
               router.invalidate();
               reset();
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
-          </button>
+            {t.retry}
+          </Button>
           <a
-            href="/"
+            href={lang === "es" ? "/" : "/en"}
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Go home
+            {t.home}
           </a>
         </div>
       </div>
@@ -82,11 +81,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "EFRAN — Efraín González, Senior Software Engineer" },
-      { name: "description", content: "Portafolio profesional de Efraín González Macías, Senior Software Engineer y Full Stack Developer." },
-      { name: "author", content: "Efraín González Macías" },
+      { title: CONTENT.es.meta.title },
+      { name: "description", content: CONTENT.es.meta.description },
+      { name: "author", content: PERSON_NAME },
       { name: "theme-color", content: "#153B50" },
-      { property: "og:site_name", content: "EFRAN — Efraín González" },
+      { property: "og:site_name", content: BRAND_NAME },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

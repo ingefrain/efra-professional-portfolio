@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ProjectPage } from "@/components/site/ProjectPage";
-import { getProject, projectPath } from "@/content/site";
+import { CONTENT, getProject, projectPath } from "@/content/site";
 import { buildHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/proyectos/$slug")({
@@ -11,8 +11,14 @@ export const Route = createFileRoute("/proyectos/$slug")({
   },
   head: ({ params, loaderData }) => {
     const project = loaderData ? getProject("es", loaderData.slug) : undefined;
-    if (!project) return { meta: [{ title: "Proyecto no disponible — EFRAN" }, { name: "robots", content: "noindex" }] };
-    const title = `${project.name}: ${project.kicker} — Efraín González`;
+    if (!project)
+      return {
+        meta: [
+          { title: CONTENT.es.errors.projectUnavailable },
+          { name: "robots", content: "noindex" },
+        ],
+      };
+    const title = `${project.name}: ${project.kicker} — EFRA`;
     return buildHead({
       lang: "es",
       title,
@@ -27,5 +33,7 @@ export const Route = createFileRoute("/proyectos/$slug")({
 
 function ProjectRoute() {
   const { slug } = Route.useLoaderData();
-  return <ProjectPage lang="es" project={getProject("es", slug)!} />;
+  const project = getProject("es", slug);
+  if (!project) throw notFound();
+  return <ProjectPage lang="es" project={project} />;
 }

@@ -1,5 +1,6 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { CONTENT, type Lang } from "@/content/site";
 import { Container } from "./Container";
 import { CvButton } from "./CvButton";
@@ -28,16 +29,24 @@ export function SiteHeader({ lang, page }: { lang: Lang; page: PageRef }) {
         {t.ui.skip}
       </a>
       <Container className="flex h-[72px] items-center justify-between gap-6">
-        <SectionLink lang={lang} className="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring" onClick={() => setOpen(false)}>
+        <SectionLink
+          lang={lang}
+          className="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+          onClick={() => setOpen(false)}
+        >
           <Logo />
           <span className="sr-only"> — {t.nav.home}</span>
         </SectionLink>
 
-        <nav aria-label={lang === "es" ? "Principal" : "Main"} className="hidden lg:block">
+        <nav aria-label={t.ui.mainNav} className="hidden lg:block">
           <ul className="flex items-center gap-7 text-[0.88rem] font-medium text-foreground/75">
             {ITEMS.map((item) => (
               <li key={item.key}>
-                <SectionLink lang={lang} section={item.section} className="transition-colors hover:text-primary">
+                <SectionLink
+                  lang={lang}
+                  section={item.section}
+                  className="transition-colors hover:text-primary"
+                >
                   {t.nav[item.key]}
                 </SectionLink>
               </li>
@@ -52,7 +61,9 @@ export function SiteHeader({ lang, page }: { lang: Lang; page: PageRef }) {
 
         <div className="flex items-center gap-3 lg:hidden">
           <LangSwitch lang={lang} page={page} />
-          <button
+          <Button
+            variant="outline"
+            size="icon"
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
@@ -61,7 +72,7 @@ export function SiteHeader({ lang, page }: { lang: Lang; page: PageRef }) {
             className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary"
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
-          </button>
+          </Button>
         </div>
       </Container>
 

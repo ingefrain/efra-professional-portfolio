@@ -2,7 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { describe, expect, it } from "vitest";
 
-import { CONTENT, CV_URL, PROJECT_SLUGS, alternatePath, cvHref } from "@/content/site";
+import { CONTENT, CV_URL, PROJECT_SLUGS, alternatePath, cvHref, getProject } from "@/content/site";
 import { routeTree } from "@/routeTree.gen";
 
 const router = () => createRouter({ routeTree, context: { queryClient: new QueryClient() } });
@@ -16,7 +16,9 @@ describe("bilingual routes", () => {
   it("has a detail page for each project in both languages", () => {
     for (const slug of PROJECT_SLUGS) {
       expect(router().matchRoutes(`/proyectos/${slug}`).at(-1)?.routeId).toBe("/proyectos/$slug");
-      expect(router().matchRoutes(`/en/projects/${slug}`).at(-1)?.routeId).toBe("/en/projects/$slug");
+      expect(router().matchRoutes(`/en/projects/${slug}`).at(-1)?.routeId).toBe(
+        "/en/projects/$slug",
+      );
     }
   });
 
@@ -29,16 +31,71 @@ describe("bilingual routes", () => {
 });
 
 describe("content rules", () => {
-  it("shows the four experience indicators", () => {
+  it("uses the three professional indicator values", () => {
     for (const lang of ["es", "en"] as const) {
-      expect(CONTENT[lang].indicators.map((i) => i.value)).toEqual(["20", "100+", "3,100+", "ERP · SaaS"]);
+      expect(CONTENT[lang].indicators.map((i) => i.value)).toEqual(["20", "3", "100+"]);
     }
   });
 
-  it("lists the five featured projects in order in both languages", () => {
-    const names = ["Grupo Talento", "ACERCA", "GLOP Contadores", "FluxSalud", "USB Stock"];
-    expect(CONTENT.es.projects.items.map((p) => p.name)).toEqual(names);
-    expect(CONTENT.en.projects.items.map((p) => p.name)).toEqual(names);
+  it("includes all six supplied projects in both languages", () => {
+    const slugs = [
+      "grupo-talento",
+      "usb-stock",
+      "acerca",
+      "fluxsalud",
+      "glop-contadores",
+      "colicontjal",
+    ];
+    expect(CONTENT.es.projects.items.map((p) => p.slug)).toEqual(slugs);
+    expect(CONTENT.en.projects.items.map((p) => p.slug)).toEqual(slugs);
+  });
+
+  it("preserves the supplied USB Stock demonstration and repository destinations", () => {
+    for (const lang of ["es", "en"] as const) {
+      expect(getProject(lang, "usb-stock")?.links?.map((l) => l.href)).toEqual([
+        "https://usbstock.efra.biz/",
+        "https://github.com/ingefrain/usbstock",
+      ]);
+    }
+  });
+
+  it("does not offer the planned FluxSalud demo as an available link", () => {
+    for (const lang of ["es", "en"] as const)
+      expect(getProject(lang, "fluxsalud")?.links).toEqual([]);
+  });
+
+  it("retains the correct Grupo Talento corporate domains", () => {
+    const domains = [
+      "grupotalento.com.mx",
+      "usbstock.mx",
+      "usbpromocional.com.mx",
+      "usbpromotional.com",
+      "usbirdy.com",
+      "publimarca.com.mx",
+      "fastgate.com.mx",
+      "promoestres.com",
+    ];
+    for (const lang of ["es", "en"] as const) {
+      expect(getProject(lang, "grupo-talento")?.links?.map((l) => l.href)).toEqual(
+        domains.map((d) => `https://${d}`),
+      );
+    }
+  });
+
+  it("uses the supplied accounting and association project destinations", () => {
+    for (const lang of ["es", "en"] as const) {
+      expect(getProject(lang, "glop-contadores")?.links?.map((l) => l.href)).toEqual([
+        "https://glop.mx/",
+      ]);
+      expect(getProject(lang, "colicontjal")?.links?.map((l) => l.href)).toEqual([
+        "https://colicontjal.org.mx/",
+        "https://youtu.be/hYDTpx5ikcI",
+      ]);
+      expect(getProject(lang, "acerca")?.links?.map((l) => l.href)).toEqual([
+        "https://acerca.efra.biz/",
+        "https://acerca.mx/",
+      ]);
+    }
   });
 
   it("CV buttons download the uploaded PDF", () => {

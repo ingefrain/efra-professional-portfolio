@@ -1,4 +1,5 @@
 import { SITE_URL, type Lang } from "@/content/site";
+import portrait from "@/assets/efrain-gonzalez-portrait.webp.asset.json";
 
 type HeadInput = {
   lang: Lang;
@@ -12,7 +13,15 @@ type HeadInput = {
 
 const abs = (path: string) => `${SITE_URL}${path === "/" ? "/" : path}`;
 
-export function buildHead({ lang, title, description, path, altPath, type = "website", jsonLd }: HeadInput) {
+export function buildHead({
+  lang,
+  title,
+  description,
+  path,
+  altPath,
+  type = "website",
+  jsonLd,
+}: HeadInput) {
   const esPath = lang === "es" ? path : altPath;
   const enPath = lang === "en" ? path : altPath;
   return {
@@ -28,6 +37,12 @@ export function buildHead({ lang, title, description, path, altPath, type = "web
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: title },
       { name: "twitter:description", content: description },
+      ...(type === "profile" && portrait.url.startsWith("https://")
+        ? [
+            { property: "og:image", content: portrait.url },
+            { name: "twitter:image", content: portrait.url },
+          ]
+        : []),
     ],
     links: [
       { rel: "canonical", href: abs(path) },
